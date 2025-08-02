@@ -105,9 +105,9 @@ venv.bak/
 dmypy.json
 
 # Data files (but keep structure)
-data/raw/*
+
 !data/raw/.gitkeep
-data/external/*
+
 !data/external/.gitkeep
 
 # Model files
