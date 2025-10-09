@@ -1,0 +1,21 @@
+# --- Anomaly Detection Parameters ---
+# This file centralizes all tunable parameters for the detection models.
+
+# Parameters for the Modified Z-score method (robust to outliers)
+modified_z_score:
+  model_id: 6
+  threshold: 3.5 # Threshold for Modified Z-score is often slightly higher (e.g., 3.5)
+  min_data_points: 7
+
+# Parameters for the Moving Average method
+moving_average:
+  model_id: 7
+  window_size: 7
+  threshold_percentage: 20
+
+# --- BigQuery Configuration ---
+bigquery:
+  project_id: "price-pulse-470211"  # <-- IMPORTANT: UPDATE THIS
+  dataset_id: "warehouse" # <-- IMPORTANT: UPDATE THIS
+  fact_price_anomaly_table: "FactPriceAnomaly"
+
