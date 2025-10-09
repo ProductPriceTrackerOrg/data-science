@@ -1,6 +1,7 @@
 import pandas as pd
 from google.cloud import bigquery
 import logging
+from datetime import datetime, timezone
 
 def write_anomalies_to_bigquery(anomalies_df: pd.DataFrame, project_id: str, dataset_id: str, table_name: str):
     """
@@ -20,15 +21,24 @@ def write_anomalies_to_bigquery(anomalies_df: pd.DataFrame, project_id: str, dat
         client = bigquery.Client(project=project_id)
         table_id = f"{project_id}.{dataset_id}.{table_name}"
 
+        # --- FIX: GENERATE THE REQUIRED anomaly_id ---
+        now_nanos = int(datetime.now(timezone.utc).timestamp() * 1_000_000_000)
+        anomalies_df = anomalies_df.reset_index(drop=True)
+        anomalies_df['anomaly_id'] = [now_nanos + i for i in anomalies_df.index]
+
         # Prepare the DataFrame to match the FactPriceAnomaly schema
         df_to_load = pd.DataFrame({
+            'anomaly_id': anomalies_df['anomaly_id'].astype('Int64'), # Added anomaly_id
             'price_fact_id': anomalies_df['price_fact_id'].astype(int),
             'model_id': anomalies_df['model_id'].astype(int),
             'anomaly_score': anomalies_df['anomaly_score'].astype(float),
             'anomaly_type': anomalies_df['anomaly_type'].astype(str),
             'created_at': pd.to_datetime(anomalies_df['created_at']),
-            'status': 'PENDING_REVIEW'
+            'status': 'PENDING_REVIEW',
+            'reviewed_by_user_id': None # Added reviewed_by_user_id, set to NULL
         })
+        
+    
 
         job_config = bigquery.LoadJobConfig(
             write_disposition="WRITE_APPEND", # Append new anomalies to the table
