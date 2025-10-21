@@ -1,0 +1,14 @@
+Gemini API key configured successfully.
+Successfully loaded 40 rows from match_product_data.csv.
+Starting LLM validation for 40 product pairs...
+Validating: 100%|██████████| 40/40 [00:05<00:00,  1.38s/it]
+
+--- Validation Report ---
+Total Rows Processed:         40
+Successful LLM Predictions: 40
+Failed/Invalid LLM Responses: 0
+Correct Predictions:          40
+---------------------------------
+Final Accuracy Score: 100.00 / 100
+---------------------------------
+Validation results with LLM predictions saved to match_product_validation.csv
